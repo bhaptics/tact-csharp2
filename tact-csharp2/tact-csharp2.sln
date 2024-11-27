@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tact-csharp2", "tact-csharp2\tact-csharp2.csproj", "{6E39913E-E124-43BA-882A-3ED93E7BFA82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharp2-sample", "csharp2-sample\csharp2-sample.csproj", "{D2087183-237F-4B6C-B0BF-43D6CF120808}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6E39913E-E124-43BA-882A-3ED93E7BFA82} = {6E39913E-E124-43BA-882A-3ED93E7BFA82}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E39913E-E124-43BA-882A-3ED93E7BFA82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E39913E-E124-43BA-882A-3ED93E7BFA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E39913E-E124-43BA-882A-3ED93E7BFA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E39913E-E124-43BA-882A-3ED93E7BFA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2087183-237F-4B6C-B0BF-43D6CF120808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2087183-237F-4B6C-B0BF-43D6CF120808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2087183-237F-4B6C-B0BF-43D6CF120808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2087183-237F-4B6C-B0BF-43D6CF120808}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7ED36C86-D5E3-4A21-A45C-D07B03BB82BC}
+	EndGlobalSection
+EndGlobal
