@@ -7,6 +7,9 @@
 
 2. This project is a library designed for use in C#.  
 
+3. Download the **bHaptics Player** from the following link: [bHaptics Player](https://www.bhaptics.com/software/player/?type=pcplayer).  
+   - Make sure the player is running for the library to work.  
+
 ## Project Structure  
 
 The project is divided into two folders:  
