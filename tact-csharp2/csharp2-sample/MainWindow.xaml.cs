@@ -32,10 +32,9 @@ namespace csharp2_sample
 
         private void Sdk_load_event(object sender, RoutedEventArgs e)
         {
-            var res = BhapticsSDK2Wrapper.bHapticsGetHapticMappings(_sdkKey, _appId, -1, out var status);
+            var res = BhapticsSDK2Wrapper.getHapticMappingsJson();
             var msg = PtrToStringUtf8(res);
             Debug.WriteLine(msg);
-            Debug.WriteLine(status);
 
             var apiResult = JsonConvert.DeserializeObject<ApiResponse<List<MappingMetaData>>>(msg);
             var eventList = apiResult.Message;
