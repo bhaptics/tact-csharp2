@@ -1,5 +1,15 @@
 ## Basic Functions
 
+### `bHapticsGetVersion`
+
+```c#
+IntPtr bHapticsGetVersion()
+```
+
+Returns the loaded native library version as `"MAJOR.MINOR.PATCH"` (read it with `Marshal.PtrToStringAnsi`).
+
+---
+
 ### `registryAndInit`
 
 ```c#
@@ -15,7 +25,7 @@ Registers the app with a locally running bHaptics Player and initializes it with
     * `sdkAPIKey` – Workspace key generated on the developer site
     * `workspaceId` – Workspace ID of the app
     * `initData` – Initial haptic message (JSON string)
-* **Returns** – `true`if the WebSocket is successfully opened, otherwise `false`
+* **Returns** – `true` once the connection has been started in the background (it returns immediately), `false` only on internal failure. Wait for `wsIsConnected()` before playing.
 
 ---
 
@@ -36,7 +46,7 @@ Registers the app with a **remote** bHaptics Player instead of the one on the lo
     * `workspaceId` – Workspace ID of the app
     * `initData` – Initial haptic message (JSON string)
     * `url` – IP address (or hostname) of the remote Player
-* **Returns** – `true`if the WebSocket is successfully opened, otherwise `false`
+* **Returns** – `true` once the connection has been started in the background (it returns immediately), `false` only on internal failure. Wait for `wsIsConnected()` before playing.
 
 ---
 
@@ -62,22 +72,24 @@ Closes the WebSocket connection to the Player.
 
 ---
 
-### `reInitMessage`
+### `retryInitialize`
 
 ```c#
-bool reInitMessage(string sdkAPIKey,
-                   string workspaceId,
-                   string initData)
+void retryInitialize(string sdkAPIKey,
+                     string workspaceId)
 ```
 
-Re‑registers the app and resends the initial haptic message.
+Re‑sends the registration over the existing connection (e.g. after the Player restarts). Call it only after `registryAndInit`; it does not open a new connection. Replaces `reInitMessage`.
 
-* **Parameters**
+---
 
-    * `sdkAPIKey` – Workspace key
-    * `workspaceId` – Workspace ID of the app
-    * `initData` – Initial haptic message (JSON string)
-* **Returns** – `true` if the message was sent, or `false` if the WebSocket is not connected
+### `bHapticsShutdown`
+
+```c#
+void bHapticsShutdown()
+```
+
+Closes the connection and stops the library's background threads. Call it once when your app exits or before the native library is unloaded. A later `registryAndInit` starts a fresh runtime.
 
 ---
 
@@ -112,7 +124,7 @@ Plays an event with custom parameters.
 
 * **Parameters**
   `eventId` – Event name
-  `requestId` – Use `0` to auto‑generate
+  `requestId` – Use `-1` to auto‑generate
   `intensity` – Strength(Default=1.0)
   `duration` – Duration(Default=1.0)
   `angleX` – X‑axis offset(Default=0.0)
@@ -220,6 +232,29 @@ Loops an event at a given interval and for a maximum count.
 
 ---
 
+### `playWaveformDk3`
+
+```c#
+int playWaveformDk3(int requestId,
+                    int position,
+                    int[] motorValues,
+                    int[] playTimeValues,
+                    int[] shapeValues,
+                    int frequency,
+                    int repeatCount,
+                    int motorLen)
+```
+
+Same as `playWaveform`, for the TactGlove DK3 variant, with a `frequency` value forwarded to the device.
+
+---
+
+### `*ToDevice` variants
+
+`playWithStartTimeToDevice`, `playDotToDevice`, `playPathToDevice` and `playLoopToDevice` take the same parameters as their base function plus a trailing `int deviceIndex`, to drive one of several connected devices of the same type.
+
+---
+
 ## Event‑Control Functions
 
 ### `getEventTime`
@@ -232,25 +267,23 @@ Returns the total duration (ms) of the specified event.
 
 ---
 
-### `pause`
+### `pauseEvent`
 
 ```c#
-int pause(string eventId)
+void pauseEvent(string eventId)
 ```
 
-Pauses a running event and returns the elapsed time (ms) at the pause point.
+Pauses a running event. Replaces `pause`.
 
 ---
 
 ### `resume`
 
 ```c#
-bool resume(string eventId)
+void resume(string eventId)
 ```
 
 Resumes a paused event.
-
-* **Returns** – `true`if resumed successfully, otherwise `false`
 
 ---
 
@@ -381,6 +414,18 @@ IntPtr getHapticMappingsJson()
 ```
 
 Returns the app’s haptic event list (JSON string).
+
+---
+
+### `bHapticsGetHapticMessage` / `bHapticsGetHapticMappings`
+
+```c#
+IntPtr bHapticsGetHapticMessage(string appKey, string workspaceId, int lastVersion, out int status)
+IntPtr bHapticsGetHapticMappings(string appKey, string workspaceId, int lastVersion, out int status)
+```
+
+Fetches the app's haptic message / mapping bundle (JSON string) from the bHaptics server. Pass `lastVersion = -1` for the latest.
+`status`: 0 = Success, 100 = NotChanged, 2 = ApiKeyError, 3 = WorkspaceError, 4 = WorkspaceDeployError, 999 = UnknownError.
 
 ---
 

@@ -1,11 +1,16 @@
-﻿using System.Runtime.InteropServices;
-using System;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace tact_csharp2
 {
+    /// <summary>P/Invoke bindings for the bHaptics SDK 2.8.2 native library (tact-cpp2 sdk/include/bhaptics/bhaptics.h).</summary>
+    /// <remarks>Functions returning <see cref="IntPtr"/> return a UTF-8 string owned by the library; copy it, never free it.</remarks>
     public class BhapticsSDK2Wrapper
     {
         private const string ModuleName = "bhaptics_library";
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr bHapticsGetVersion();
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -16,6 +21,9 @@ namespace tact_csharp2
         public static extern bool registryAndInitHost(string sdkAPIKey, string workspaceId, string initData, string url);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void retryInitialize(string sdkAPIKey, string workspaceId);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool wsIsConnected();
 
@@ -23,8 +31,7 @@ namespace tact_csharp2
         public static extern void wsClose();
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool reInitMessage(string sdkAPIKey, string workspaceId, string initData);
+        public static extern void bHapticsShutdown();
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int play(string eventId);
@@ -33,29 +40,46 @@ namespace tact_csharp2
         public static extern int playParam(string eventId, int requestId, float intensity, float duration, float angleX, float offsetY);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void playWithStartTime(string eventId, int requestId, int startMillis, float intensity, float duration, float angleX, float offsetY);
+        public static extern void playWithoutResult(string eventId, int requestId, float intensity, float duration, float angleX, float offsetY);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int playDot(int requestId, int position, int durationMillis, int[] motors, int size);
+        public static extern int playWithStartTime(string eventId, int requestId, int startMillis, float intensity, float duration, float angleX, float offsetY);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int playWaveform(int requestId, int position, int[] motorValues, int[] playTimeValues, int[] shapeValues, int motorLen);
+        public static extern int playWithStartTimeToDevice(string eventId, int requestId, int startMillis, float intensity, float duration, float angleX, float offsetY, int deviceIndex);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int playPath(int requestId, int position, float[] xValues, float[] yValues, int[] intensityValues, int Len);
+        public static extern int playDot(int requestId, int position, int durationMillis, int[] motorValues, int motorValueLen);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int playDotToDevice(int requestId, int position, int durationMillis, int[] motorValues, int motorValueLen, int deviceIndex);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int playWaveform(int requestId, int position, int[] motorValues, int[] playTimeValues, int[] shapeValues, int repeatCount, int motorLen);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int playWaveformDk3(int requestId, int position, int[] motorValues, int[] playTimeValues, int[] shapeValues, int frequency, int repeatCount, int motorLen);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int playPath(int requestId, int position, int durationMillis, float[] xValues, float[] yValues, int[] intensityValues, int len);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int playPathToDevice(int requestId, int position, int durationMillis, float[] xValues, float[] yValues, int[] intensityValues, int len, int deviceIndex);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int playLoop(string eventId, int requestId, float intensity, float duration, float angleX, float offsetY, int interval, int maxCount);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int playLoopToDevice(string eventId, int requestId, float intensity, float duration, float angleX, float offsetY, int interval, int maxCount, int deviceIndex);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int getEventTime(string eventId);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int pause(string eventId);
+        public static extern void pauseEvent(string eventId);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool resume(string eventId);
+        public static extern void resume(string eventId);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -86,6 +110,12 @@ namespace tact_csharp2
         public static extern bool isPlayingByEventId(string eventId);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr bHapticsGetHapticMessage(string appKey, string workspaceId, int lastVersion, out int status);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr bHapticsGetHapticMappings(string appKey, string workspaceId, int lastVersion, out int status);
+
+        [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool isPlayerRunning();
 
@@ -95,7 +125,7 @@ namespace tact_csharp2
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool launchPlayer(bool tryLaunch);
+        public static extern bool launchPlayer([MarshalAs(UnmanagedType.I1)] bool tryLaunch);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr getDeviceInfoJson();
