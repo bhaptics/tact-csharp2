@@ -23,16 +23,15 @@ It targets .NET Framework 4.6.1+ (`net461`) and .NET (Core) / .NET 5+ (`netstand
 
 ## Usage  
 
-Reference the `tact-csharp2` project, or copy these files next to your executable, keeping the folder layout:
+Reference the `tact-csharp2` project, or copy these files next to your executable:
 
 ```
 tact-csharp2.dll
-win-x64/bhaptics_library.dll    Windows 64-bit
-win-x86/bhaptics_library.dll    Windows 32-bit
-libbhaptics_library.dylib       macOS (Apple silicon + Intel)
+bhaptics_library.dll         Windows x64
+libbhaptics_library.dylib    macOS (Apple silicon + Intel)
 ```
 
-On Windows the wrapper loads the DLL that matches the process (64-bit or 32-bit), so `Prefer 32-bit` no longer needs to be disabled.
+Windows apps must run as 64-bit: in Visual Studio, disable `Prefer 32-bit` under the **Build** tab.
 `registryAndInit` connects in the background; wait for `wsIsConnected()` before the first play call.
 Call `bHapticsShutdown()` when your app exits.
 

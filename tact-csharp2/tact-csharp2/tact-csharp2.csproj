@@ -4,11 +4,10 @@
     <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <RootNamespace>tact_csharp2</RootNamespace>
     <AssemblyName>tact-csharp2</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Version>2.8.2</Version>
   </PropertyGroup>
   <ItemGroup>
-    <None Update="native\win-x64\bhaptics_library.dll" Link="win-x64\bhaptics_library.dll" CopyToOutputDirectory="PreserveNewest" />
-    <None Update="native\win-x86\bhaptics_library.dll" Link="win-x86\bhaptics_library.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="native\win-x64\bhaptics_library.dll" Link="bhaptics_library.dll" CopyToOutputDirectory="PreserveNewest" />
     <None Update="native\osx\libbhaptics_library.dylib" Link="libbhaptics_library.dylib" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

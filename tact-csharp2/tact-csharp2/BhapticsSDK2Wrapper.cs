@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace tact_csharp2
@@ -9,21 +8,6 @@ namespace tact_csharp2
     public class BhapticsSDK2Wrapper
     {
         private const string ModuleName = "bhaptics_library";
-
-        static BhapticsSDK2Wrapper()
-        {
-            // Windows ships x64 and x86 DLLs with the same name, so preload the one matching the process;
-            // DllImport then binds to the already-loaded module. If the file is missing, normal DLL search applies.
-            // macOS loads libbhaptics_library.dylib from the app directory without help.
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                var dir = IntPtr.Size == 8 ? "win-x64" : "win-x86";
-                LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dir, ModuleName + ".dll"));
-            }
-        }
-
-        [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern IntPtr LoadLibrary(string path);
 
         [DllImport(ModuleName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr bHapticsGetVersion();
